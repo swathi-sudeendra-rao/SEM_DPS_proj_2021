@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
     else
         printf("Connected to master truck\n");
 
-            //creating a client thread which is always waiting for a message
-            pthread_create(&recvt, NULL, (void *)recvmg, &sock);
+    //creating a client thread which is always waiting for a message
+    pthread_create(&recvt, NULL, (void *)recvmg, &sock);
 
     //ready to read a message from console
     while (fgets(msg, 500, stdin) > 0)
