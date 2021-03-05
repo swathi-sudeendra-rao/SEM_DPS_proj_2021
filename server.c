@@ -9,7 +9,7 @@ pthread_mutex_t mutex;
 int clients[200];
 int n = 0;
 
-void test(char *expectedRes, char *currRes, const char *testName)
+/* void test(char *expectedRes, char *currRes, const char *testName)
 {
     if (expectedRes == currRes)
     {
@@ -19,7 +19,7 @@ void test(char *expectedRes, char *currRes, const char *testName)
     {
         printf("\n%s Failed. expected: %s, but actual result: %s", testName, expectedRes, currRes);
     }
-}
+} */
 
 void sendtoall(char *msg, int curr)
 {
@@ -82,6 +82,7 @@ void *recvmg(void *client_sock)
     char *ptr3 = strstr(msg, "exit");
     while ((len = recv(sock, msg, 500, 0)) > 0)
     {
+        //pthread_mutex_lock(&mutex);
         msg[len] = '\0';
         printf("%s", msg);
         sendtoall(msg, sock);
@@ -103,7 +104,7 @@ void *sendMsg(void *clientSock)
 int main()
 {
     struct sockaddr_in ServerIp;
-    pthread_t recvt;
+    pthread_t recvt[60];
     pthread_t sendt;
     int sock = 0, Client_sock = 0;
     char serverMsg[500];
@@ -127,6 +128,9 @@ int main()
     if (listen(sock, 20) == -1)
         printf("listening failed \n");
 
+    pthread_t tid[60];
+    int i = 0;
+
     while (1)
     {
         if ((Client_sock = accept(sock, (struct sockaddr *)NULL, NULL)) < 0)
@@ -138,11 +142,30 @@ int main()
             printf("Connection accepted from new truck\n");
         }
         pthread_mutex_lock(&mutex);
-        clients[n] = Client_sock;
-        n++;
+        /* clients[n] = Client_sock;
+        n++; */
+
         // creating a thread for each client
-        pthread_create(&recvt, NULL, (void *)recvmg, &Client_sock);
-        pthread_create(&sendt, NULL, (void *)sendMsg, &Client_sock);
+        if (pthread_create(&recvt[i++], NULL, (void *)recvmg, &Client_sock) != 0)
+        {
+            printf("Failed to create thread\n");
+        }
+        else
+        {
+            clients[n] = Client_sock;
+            n++;
+        }
+
+        //pthread_create(&sendt, NULL, (void *)sendMsg, &Client_sock);
+        if (i >= 50)
+        {
+            i = 0;
+            while (i < 50)
+            {
+                pthread_join(tid[i++], NULL);
+            }
+            i = 0;
+        }
         pthread_mutex_unlock(&mutex);
     }
     return 0;
