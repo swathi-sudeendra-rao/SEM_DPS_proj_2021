@@ -13,3 +13,11 @@
     i) gcc client.c -pthread
     
     ii) ./a.out client_name
+    
+## checking for:
+
+1. EB message
+2. Low fuel alert
+3. Distance estimation request
+4. Change of lane notification and
+5. Exit from the platoon
