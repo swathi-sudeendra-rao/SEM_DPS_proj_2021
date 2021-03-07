@@ -16,7 +16,7 @@
     
 ## checking for:
 
-1. EB message
+1. Emergency Braking message
 2. Low fuel alert
 3. Distance estimation request
 4. Change of lane notification and
