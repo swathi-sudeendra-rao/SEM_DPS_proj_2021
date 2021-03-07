@@ -9,18 +9,6 @@ pthread_mutex_t mutex;
 int clients[200];
 int n = 0;
 
-/* void test(char *expectedRes, char *currRes, const char *testName)
-{
-    if (expectedRes == currRes)
-    {
-        printf("\n%s Passed", testName);
-    }
-    else
-    {
-        printf("\n%s Failed. expected: %s, but actual result: %s", testName, expectedRes, currRes);
-    }
-} */
-
 void sendtoall(char *msg, int curr)
 {
     int i;
@@ -34,7 +22,7 @@ void sendtoall(char *msg, int curr)
     char lfMsg[500] = "Low fuel alert recieved from ";
     char *ptr1 = strstr(msg, "EB");
     char *ptr2 = strstr(msg, "low fuel");
-    char *ptr3 = strstr(msg, "disctance estimation");
+    char *ptr3 = strstr(msg, "distance estimation");
     char *ptr4 = strstr(msg, "lane");
 
     if (ptr1 != NULL)
@@ -142,8 +130,6 @@ int main()
             printf("Connection accepted from new truck\n");
         }
         pthread_mutex_lock(&mutex);
-        /* clients[n] = Client_sock;
-        n++; */
 
         // creating a thread for each client
         if (pthread_create(&recvt[i++], NULL, (void *)recvmg, &Client_sock) != 0)
@@ -156,7 +142,6 @@ int main()
             n++;
         }
 
-        //pthread_create(&sendt, NULL, (void *)sendMsg, &Client_sock);
         if (i >= 50)
         {
             i = 0;

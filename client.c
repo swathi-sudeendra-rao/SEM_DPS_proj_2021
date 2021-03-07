@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
                 if (len < 0)
                     printf("\n message not sent \n");
                 ptr3 = NULL;
+                //close(sock);
+                pthread_exit(NULL);
                 exit(0);
             }
             else
